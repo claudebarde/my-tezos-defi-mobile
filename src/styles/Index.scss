@@ -1,0 +1,62 @@
+@import "./settings.scss";
+
+html,
+body {
+  overscroll-behavior: none;
+  height: 100vh;
+  color: $bg-color;
+  font-family: "Signika", sans-serif;
+  font-size: 1rem;
+  padding: 0px;
+  margin: 0px;
+}
+
+button {
+  border-radius: 10px;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0px 5px;
+
+  &.primary {
+    padding: 10px 15px;
+    color: $container-bg-color;
+    background-color: lighten($container-bg-color, 60);
+    border: none;
+    transition: 0.3s;
+
+    img {
+      height: 1rem;
+    }
+
+    &:not(:disabled):hover {
+      color: white;
+      background-color: $container-bg-color;
+    }
+
+    &:disabled {
+      background-color: transparent;
+    }
+  }
+
+  &.footer_button {
+    border: none;
+    background-color: transparent;
+    color: inherit;
+    padding: 0px;
+    margin: 0px;
+  }
+}
+
+input[type="text"] {
+  border: none;
+  outline: none;
+  font-size: 1.1rem;
+  padding: 10px;
+  background-color: lighten($container-bg-color, 65);
+  text-align: left;
+  color: inherit;
+  width: 100%;
+}

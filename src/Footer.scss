@@ -1,0 +1,8 @@
+@import "./styles/settings.scss";
+
+footer {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background-color: lighten($container-bg-color, 65);
+}

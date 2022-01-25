@@ -1,0 +1,21 @@
+.container__home__no_user {
+  display: grid;
+  place-items: center;
+  width: 80%;
+  margin: 0 auto;
+  text-align: center;
+
+  .address_input {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  div,
+  input,
+  button {
+    margin: 10px 0px;
+    font-size: 1.3rem;
+  }
+}
