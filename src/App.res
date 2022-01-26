@@ -37,6 +37,7 @@ let make = () => {
   <div className="container">
     <Header ?user_address />
     <Router ?user_address current_page set_user_address />
+    <TokensBanner />
     <Footer ?user_address />
   </div>
 }
