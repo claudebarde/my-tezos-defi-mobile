@@ -1,4 +1,5 @@
 open Dom.Storage2
+open Context
 
 type t = {
   userAddress: string
@@ -12,32 +13,33 @@ require("../../../src/App.scss")->ignore
 
 @react.component
 let make = () => {
-  let (user_address, set_user_address) = React.useState(_ => None)
-  let (current_page, set_current_page) = React.useState(_ => Config.Home_page)
+  let (state, dispatch) = React.useReducer(update_context_reducer, context_initial_value)
 
   let _ = RescriptReactRouter.watchUrl(url => {    
-    switch url.path {
-      | list{"tokens"} => set_current_page(_ => Config.Tokens_page)
-      | list{"farms"} => set_current_page(_ => Config.Farms_page)
-      | list{"settings"} => set_current_page(_ => Config.Settings_page)
-      | list{} => set_current_page(_ => Config.Home_page)
-      | _ => set_current_page(_ => Config.Not_found_page)
-    }
+    let new_page = Router.route_to(url.path)
+    dispatch(Update_current_page(new_page))
   })
 
   let _ = React.useEffect0(() => {
+    // sets the app to the home page on load
+    let _ = RescriptReactRouter.push("/")
     // finds if user is connected
     let _ = switch localStorage->getItem(Config.ls_prefix ++ Config.ls_user_address) {
-      | None => set_user_address(_ => None)
-      | Some(addr) => set_user_address(_ => Some(addr))
+      | None => dispatch(Update_user_address(None))
+      | Some(addr) => dispatch(Update_user_address(Some(addr)))
     }
+
     None
   })
 
   <div className="container">
-    <Header ?user_address />
-    <Router ?user_address current_page set_user_address />
-    <TokensBanner />
-    <Footer ?user_address />
+    <StateContext.Provider value={state} >
+      <DispatchContext.Provider value={dispatch}>
+        <Header />
+        <Router />
+        <TokensBanner />
+        <Footer />
+      </DispatchContext.Provider>
+    </StateContext.Provider>
   </div>
 }

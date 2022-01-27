@@ -1,17 +1,19 @@
 open Dom.Storage2
+open Context
 
 @val external localStorage: Dom.Storage2.t = "localStorage"
 @val external require: string => string = "require"
 require("../../../../src/Home/Home_No_user.scss")->ignore
 
 @react.component
-let make = (~set_user_address) => {
+let make = () => {
+    let update_context = React.useContext(DispatchContext.context)
     let (comp_user_address, set_comp_user_address) = React.useState(_ => "")
 
     let save_user_address = _ => {
         if comp_user_address->Js.String2.trim->Js.String2.length > 0 {
             localStorage->setItem(Config.ls_prefix ++ Config.ls_user_address, comp_user_address)
-            set_user_address(_ => Some(comp_user_address->Js.String2.trim))
+            update_context(Update_user_address(Some(comp_user_address->Js.String2.trim)))
         }
     }
 

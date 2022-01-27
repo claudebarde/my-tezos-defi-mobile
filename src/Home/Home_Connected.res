@@ -1,4 +1,9 @@
 @react.component
-let make = (~user_address: string) => {
-    <div>{React.string("Hello " ++ user_address)}</div>
+let make = () => {
+    let state = React.useContext(Context.StateContext.context)
+
+    switch state.user_address {
+        | None => <div>{"You are not connected"->React.string}</div>
+        | Some(addr) => <div>{React.string("Hello " ++ addr)}</div>
+    }
 }
