@@ -144,7 +144,7 @@ let make = () => {
                                                     {
                                                         switch token.exchange_rate {
                                                             | None => "N/A"->React.string
-                                                            | Some(rate) => rate->Js.Float.toFixedWithPrecision(~digits=3)->React.string
+                                                            | Some(rate) => rate->Js.Float.toFixedWithPrecision(~digits=5)->React.string
                                                         }
                                                     }
                                                 </div>
