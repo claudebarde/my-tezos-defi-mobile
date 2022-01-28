@@ -1,5 +1,5 @@
 open Dom.Storage2
-open Context
+open AppContext
 
 type t = {
   userAddress: string
@@ -20,7 +20,7 @@ let make = () => {
     dispatch(Update_current_page(new_page))
   })
 
-  let _ = React.useEffect0(() => {
+  React.useEffect0(() => {
     // sets the app to the home page on load
     let _ = RescriptReactRouter.push("/")
     // finds if user is connected

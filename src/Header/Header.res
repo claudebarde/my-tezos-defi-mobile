@@ -1,12 +1,13 @@
 open Promise
+open AppContext
 
 @val external require: string => string = "require"
 require("../../../../src/Header/Header.scss")->ignore
 
 @react.component
 let make = () => {
-    let state = React.useContext(Context.StateContext.context)
-    let (user_balance, set_user_balance) = React.useState(_ => Error("init"))
+    let state = React.useContext(StateContext.context)
+    let update_context = React.useContext(DispatchContext.context)
     
     let fetch_balance = (user_address: string): unit => {
         let query = "https://api.tzkt.io/v1/accounts/" ++ user_address ++ "/balance"
@@ -14,22 +15,22 @@ let make = () => {
             ->then(Fetch.Response.text)
             ->then(balance => {
                 switch balance->Belt.Float.fromString {
-                    | None => set_user_balance(_ => Error("Couldn't convert balance to float"))
-                    | Some (blnc) => set_user_balance(_ => Ok(blnc))
+                    | None => Update_user_balance(Error("Couldn't convert balance to float"))->update_context
+                    | Some (blnc) => Update_user_balance(Ok(blnc))->update_context
                 }->resolve
             })
             ->catch(err => {
                 Js.log(err)
-                set_user_balance(_ => Error("Unable to fetch user's balance"))->resolve
+                update_context(Update_user_balance(Error("Unable to fetch user's balance")))->resolve
             })
             ->ignore
     }
 
     React.useEffect1(() => {
         let _ = 
-        switch state.user_address {
-            | None => set_user_balance(_ => Error("No user"))            
-            | Some(addr) => fetch_balance(addr)           
+            switch state.user_address {
+                | None => Update_user_balance(Error("No user"))->update_context
+                | Some(addr) => fetch_balance(addr)           
             }
 
         None
@@ -37,7 +38,7 @@ let make = () => {
 
     <header>
         {
-            switch user_balance {
+            switch state.user_balance {
                 | Error(_) => 
                     <div>
                         {React.string("My Tezos DeFi")}
@@ -50,7 +51,7 @@ let make = () => {
                             {"Your balance:"->React.string}
                         </div>
                         <div className="balance_value">
-                            {blnc->Belt.Float.toString->React.string}
+                            {(blnc /. Js.Math.pow_float(~base=10.0, ~exp=6.0))->Belt.Float.toString->React.string}
                         </div>
                     </div>
             }

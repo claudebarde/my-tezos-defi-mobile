@@ -1,5 +1,5 @@
 open Dom.Storage2
-open Context
+open AppContext
 
 @val external localStorage: Dom.Storage2.t = "localStorage"
 

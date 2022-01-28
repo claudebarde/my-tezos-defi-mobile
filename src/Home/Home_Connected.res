@@ -1,6 +1,6 @@
 @react.component
 let make = () => {
-    let state = React.useContext(Context.StateContext.context)
+    let state = React.useContext(AppContext.StateContext.context)
 
     switch state.user_address {
         | None => <div>{"You are not connected"->React.string}</div>

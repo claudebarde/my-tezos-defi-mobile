@@ -1,25 +1,44 @@
+type token_type = FA12 | FA2 | None
+
+type token_data = {
+    name: option<string>,
+    exchange_rate: option<float>,
+    address: option<string>,
+    type_: token_type,
+    decimals: option<int>
+}
+
 type context = {
     current_page: Config.current_page,
     user_address: option<string>,
     user_balance: result<float, string>,
-    mutable counter: int
+    tokens: array<token_data>
 }
 
 let context_initial_value = {
     current_page: Home_page,
     user_address: None,
     user_balance: Error("init"),
-    counter: 1
+    tokens: []
 }
 
 type action =
-    | Update_user_address(option<string>)
     | Update_current_page(Config.current_page)
+    | Update_user_address(option<string>)
+    | Update_user_balance(result<float, string>)
+    | Update_tokens(array<token_data>)
 
 let update_context_reducer = (state, action) => {
     switch action {
-        | Update_user_address(addr) => { ...state, user_address: addr }
         | Update_current_page(page) => { ...state, current_page: page }
+        | Update_user_address(addr) => { ...state, user_address: addr }
+        | Update_user_balance(blnc) => { ...state, user_balance: blnc}
+        | Update_tokens(tokens) =>
+            if tokens->Js.Array2.length > 0 {
+                { ...state, tokens }
+            } else {
+                state
+            }
     }
 }
 

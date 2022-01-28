@@ -3,7 +3,7 @@ require("../../../../src/Footer/Footer.scss")->ignore
 
 @react.component
 let make = () => {
-    let state = React.useContext(Context.StateContext.context)
+    let state = React.useContext(AppContext.StateContext.context)
 
     <footer>
         <button className="footer_button" onClick={_ => RescriptReactRouter.push("/")}>
