@@ -29,9 +29,6 @@ let make = () => {
       | Some(addr) => dispatch(Update_user_address(Some(addr)))
     }
 
-    let requestFullscreen = %raw("document.body.requestFullscreen")
-    let _ = requestFullscreen()
-
     None
   })
 

@@ -1,9 +1,10 @@
 @import "./settings.scss";
 
 html,
-body {
+body,
+#root {
   overscroll-behavior: none;
-  height: 100vh;
+  height: 100%;
   color: $bg-color;
   font-family: "Signika", sans-serif;
   font-size: 1rem;
