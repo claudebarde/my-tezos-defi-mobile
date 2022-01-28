@@ -1,13 +1,12 @@
 open Promise
-open AppContext
 
 @val external require: string => string = "require"
 require("../../../../src/TokensBanner/TokensBanner.scss")->ignore
 
 @react.component
 let make = () => {
-    let state = React.useContext(StateContext.context)
-    let update_context = React.useContext(DispatchContext.context)
+    let state = React.useContext(AppContext.StateContext.context)
+    let update_context = React.useContext(AppContext.DispatchContext.context)
     
     let fetch_tokens_data = (): unit => {
         let query = "https://api.teztools.io/v1/prices"
@@ -43,7 +42,7 @@ let make = () => {
                                                 tk => switch tk->Js.Json.decodeObject {
                                                     | None => ()
                                                     | Some(obj) => {
-                                                        let new_obj: token_data = {
+                                                        let new_obj: AppContext.token_data = {
                                                             name: 
                                                                 switch obj->Js.Dict.get("symbol") {
                                                                     | None => None
@@ -104,7 +103,7 @@ let make = () => {
                                                     }
                                                 }
                                             )
-                                            Update_tokens(tokens_data)->update_context
+                                            AppContext.Update_tokens(tokens_data)->update_context
                                     }
                                 } 
                         }
