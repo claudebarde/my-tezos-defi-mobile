@@ -8,7 +8,7 @@ let make = () => {
     let state = React.useContext(StateContext.context)
     let update_context = React.useContext(DispatchContext.context)
 
-    <div>
+    <div className="settings">
         <div>{"Settings"->React.string}</div>        
         {
             switch state.user_address {
@@ -26,5 +26,13 @@ let make = () => {
                     </div>
             }
         }
+        <div>
+            <div>{"Go to desktop version"->React.string}</div>
+            <a href="https://www.mytezosdefi.com" style={ReactDOM.Style.make(~textDecoration="none", ~color="inherit", ())}>
+                <button className="primary">
+                    {"Desktop version"->React.string}
+                </button>
+            </a>
+        </div>
     </div>
 }

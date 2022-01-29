@@ -124,7 +124,7 @@ let make = () => {
         <div className="slide-track">
             {
                 if state.tokens->Js.Array2.length === 0 {
-                    <div>{"Token banner placeholder"->React.string}</div>
+                    <div>{"Loading tokens data..."->React.string}</div>
                 } else {
                     state.tokens
                     ->Js.Array2.map(
