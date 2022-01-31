@@ -1,5 +1,6 @@
 open Dom.Storage2
 open AppContext
+open Utils
 
 type t = {
   userAddress: string
@@ -28,6 +29,8 @@ let make = () => {
       | None => dispatch(Update_user_address(None))
       | Some(addr) => dispatch(Update_user_address(Some(addr)))
     }
+    // fetches XTZ exchange rate
+    let _ = Utils.fetch_xtz_exchange_rate(Valid_currencies.USD, dispatch)
 
     None
   })

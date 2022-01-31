@@ -50,8 +50,27 @@ let make = () => {
                         <div>
                             {"Your balance:"->React.string}
                         </div>
-                        <div className="balance_value">
-                            {(blnc /. Js.Math.pow_float(~base=10.0, ~exp=6.0))->Belt.Float.toString->React.string}
+                        <div>
+                            <span className="balance_value">
+                                {(blnc /. Js.Math.pow_float(~base=10.0, ~exp=6.0))->Belt.Float.toString->React.string}
+                            </span>
+                            {" "->React.string}
+                            <span style={ReactDOMStyle.make(~fontSize="0.9rem", ())}>
+                                {
+                                    switch state.xtz_exchange_rate {
+                                        | None => React.null
+                                        | Some(rate) => 
+                                            switch {(blnc /. Js.Math.pow_float(~base=10.0, ~exp=6.0) *. rate)}->Utils.format_currency_amount {
+                                                | Ok(r) => 
+                                                    r
+                                                    ->Belt.Float.toString
+                                                    ->(r) => ("("++r++" USD)")
+                                                    ->React.string
+                                                | Error(_) => React.null
+                                            }                                            
+                                    }                                    
+                                }
+                            </span>
                         </div>
                     </div>
             }

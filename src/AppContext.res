@@ -12,14 +12,16 @@ type context = {
     current_page: Config.current_page,
     user_address: option<string>,
     user_balance: result<float, string>,
-    tokens: array<token_data>
+    tokens: array<token_data>,
+    xtz_exchange_rate: option<float>
 }
 
 let context_initial_value = {
     current_page: Home_page,
     user_address: None,
     user_balance: Error("init"),
-    tokens: []
+    tokens: [],
+    xtz_exchange_rate: None
 }
 
 type action =
@@ -27,6 +29,7 @@ type action =
     | Update_user_address(option<string>)
     | Update_user_balance(result<float, string>)
     | Update_tokens(array<token_data>)
+    | Update_xtz_exchange_rate(option<float>)
 
 let update_context_reducer = (state, action) => {
     switch action {
@@ -39,6 +42,7 @@ let update_context_reducer = (state, action) => {
             } else {
                 state
             }
+        | Update_xtz_exchange_rate(rate) => { ...state, xtz_exchange_rate: rate}
     }
 }
 
