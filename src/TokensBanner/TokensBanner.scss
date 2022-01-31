@@ -21,6 +21,9 @@ $number-of-tokens: 52;
   overflow: hidden;
   position: relative;
   width: 100%;
+  -webkit-box-shadow: -2px -15px 29px 0px rgba(158, 158, 158, 0.22);
+  -moz-box-shadow: -2px -15px 29px 0px rgba(158, 158, 158, 0.22);
+  box-shadow: -2px -15px 29px 0px rgba(158, 158, 158, 0.22);
 
   &::before,
   &::after {
@@ -47,6 +50,7 @@ $number-of-tokens: 52;
     animation: scroll $animationSpeed linear infinite;
     display: flex;
     width: calc($slider-width * $number-of-tokens);
+    padding-top: 10px;
   }
 
   .slide {
