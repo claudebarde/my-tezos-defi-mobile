@@ -19,7 +19,7 @@ let make = () => {
             | None => ()
             | Some(addr) => {
                 Js.log("fetch token balances")
-                let query = "https://staging.api.tzkt.io/v1/tokens/balances?account=" ++ addr
+                let query = `https://staging.api.tzkt.io/v1/tokens/balances?account=${addr}&sort.desc=token.metadata.symbol`
                 Fetch.fetch(query)
                     ->then(Fetch.Response.json)
                     ->then(json => 
