@@ -103,6 +103,16 @@ let make = () => {
                                                     }
                                                 }
                                             )
+                                            let tokens_data = 
+                                                Js.Array2.sortInPlaceWith(tokens_data, 
+                                                    (tk_1, tk_2) => 
+                                                        switch (tk_1.name, tk_2.name) {
+                                                            | (None, None) => 0
+                                                            | (Some(_), None) => 1
+                                                            | (None, Some(_)) => -1
+                                                            | (Some(v_1), Some(v_2)) => v_1 > v_2 ? 1 : -1
+                                                        }
+                                                )
                                             AppContext.Update_tokens(tokens_data)->update_context
                                     }
                                 } 

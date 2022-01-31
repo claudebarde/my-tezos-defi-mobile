@@ -21,13 +21,14 @@
     padding: 1.5rem 10px;
     position: relative;
     z-index: 10;
+    background-color: lighten($container-bg-color, 65);
 
     img {
       height: 2.4rem;
       position: absolute;
       top: -1.4rem;
       left: 10px;
-      background-color: white;
+      background-color: transparent;
       padding: 0px 3px;
     }
   }
