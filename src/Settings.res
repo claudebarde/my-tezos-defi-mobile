@@ -9,7 +9,7 @@ let make = () => {
     let update_context = React.useContext(DispatchContext.context)
 
     <div className="settings">
-        <div>{"Settings"->React.string}</div>        
+        <div className="page-title">{"Settings"->React.string}</div>        
         {
             switch state.user_address {
                 | None => React.null

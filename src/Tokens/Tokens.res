@@ -121,7 +121,7 @@ let make = () => {
     }, [state.user_address])
 
     <div className="user-tokens">
-        <div>{React.string("Your tokens")}</div>
+        <div className="page-title">{React.string("Your tokens")}</div>
         <div className="tokens-list">
             {
                 user_tokens
@@ -150,13 +150,43 @@ let make = () => {
                                 </div>
                             </div> 
                             <div>
+                                <div>
+                                    {
+                                        switch {token.balance /. Js.Math.pow_float(~base=10.0, ~exp=token.decimals)}
+                                            ->Utils.format_token_amount {
+                                                | Ok(val) => val->Belt.Float.toString->React.string
+                                                | Error(val) => val->React.string
+                                            }                                                
+                                    }
+                                </div>
                                 {
-                                    switch {token.balance /. Js.Math.pow_float(~base=10.0, ~exp=token.decimals)}
-                                        ->Utils.format_token_amount {
-                                            | Ok(val) => val->Belt.Float.toString->React.string
-                                            | Error(val) => val->React.string
-                                        }                                                
-                                }
+                                    switch state.tokens->Js.Array2.find(tk => tk.name === Some(token.name)) {
+                                        | None => React.null
+                                        | Some(tk) => 
+                                            switch tk.exchange_rate {
+                                                | None => React.null
+                                                | Some(rate) =>
+                                                    switch {token.balance /. Js.Math.pow_float(~base=10.0, ~exp=token.decimals) *. rate}
+                                                        ->Utils.format_token_amount {
+                                                            | Ok(val) => 
+                                                                [
+                                                                    <div className="xtz-symbol">
+                                                                        {val->Belt.Float.toString->React.string}
+                                                                    </div>,
+                                                                    switch state.xtz_exchange_rate {
+                                                                        | None => React.null
+                                                                        | Some(rate) => 
+                                                                            switch {val *. rate}->Utils.format_token_amount {
+                                                                                | Ok(v) => <div>{{`${v->Belt.Float.toString} USD`}->React.string}</div>
+                                                                                | Error(_) => React.null
+                                                                            }
+                                                                    }
+                                                                ]->React.array
+                                                            | Error(_) => React.null
+                                                        }
+                                            }                                                
+                                        }
+                                    }
                             </div>
                         </div>
                     })

@@ -10,13 +10,19 @@
     align-items: center;
     justify-content: flex-start;
 
-    & > div {
+    & > div:not(.page-title) {
       margin: 20px 0px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
     }
+  }
+
+  .page-title {
+    padding: 10px;
+    font-size: 1.4rem;
+    text-align: center;
   }
 }
 
