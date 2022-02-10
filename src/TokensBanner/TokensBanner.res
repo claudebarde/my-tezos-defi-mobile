@@ -103,7 +103,12 @@ let make = () => {
                                                     }
                                                 }
                                             )
-                                            let tokens_data = 
+                                            let tokens_data = {
+                                                // removes eventual duplicates
+                                                let tokens_data = tokens_data->Js.Array2.filteri((tk, index) => {
+                                                    index === tokens_data->Js.Array2.findIndex(tk_ => tk_.name === tk.name)
+                                                })
+                                                // sorts array
                                                 Js.Array2.sortInPlaceWith(tokens_data, 
                                                     (tk_1, tk_2) => 
                                                         switch (tk_1.name, tk_2.name) {
@@ -113,6 +118,7 @@ let make = () => {
                                                             | (Some(v_1), Some(v_2)) => v_1 > v_2 ? 1 : -1
                                                         }
                                                 )
+                                            }
                                             AppContext.Update_tokens(tokens_data)->update_context
                                     }
                                 } 
@@ -127,44 +133,68 @@ let make = () => {
         // fetches tokens data
         let _ = fetch_tokens_data()
 
+        // test for ParseJson module
+        let _ = Fetch.fetch("https://api.teztools.io/v1/prices")
+            ->then(Fetch.Response.json)
+            ->then(json => {
+                let path = list{
+                    Utils.ParseJson.Obj("contracts"), 
+                    Utils.ParseJson.Array_map(list{Utils.ParseJson.Obj("symbol"), Utils.ParseJson.String})
+                }
+                switch Utils.ParseJson.parse_json(json, path) {
+                    | Ok(res) => ()//Js.log(j`OK -> $res`)
+                    | Error(err) => Js.log(`Error => ${err}`)
+                }->resolve
+            })
+            ->catch(err => {
+                Js.log(err)
+                resolve()
+            })
+            ->ignore
+
         None
     })
 
-    <div className="slider">
-        <div className="slide-track">
-            {
-                if state.tokens->Js.Array2.length === 0 {
-                    <div>{"Loading tokens data..."->React.string}</div>
-                } else {
-                    state.tokens
-                    ->Js.Array2.map(
-                        token =>
-                            {
-                                switch token.name {
-                                    | None => React.null
-                                    | Some(name) => 
-                                        <div key={name} className="slide">
-                                            <div>
-                                                <img src={"img/images/" ++ name ++ ".png"} />
-                                            </div>
-                                            <div>
-                                                <div>{name->React.string}</div>
-                                                <div className="exchange-rate">
-                                                    {
-                                                        switch token.exchange_rate {
-                                                            | None => "N/A"->React.string
-                                                            | Some(rate) => rate->Js.Float.toFixedWithPrecision(~digits=5)->React.string
+    {
+        if state.tokens->Js.Array2.length === 0 {
+            <div>{"Loading tokens data..."->React.string}</div>
+        } else {
+            <div className="slider">
+                <div className="slide-track">
+                    <div key="empty-slide" className="slide" />
+                    <div key="empty-slide" className="slide" />
+                    <div key="empty-slide" className="slide" />
+                    {
+                        state.tokens
+                        ->Js.Array2.map(
+                            token =>
+                                {
+                                    switch token.name {
+                                        | None => React.null
+                                        | Some(name) => 
+                                            <div key={name} className="slide">
+                                                <div>
+                                                    <img src={"img/images/" ++ name ++ ".png"} />
+                                                </div>
+                                                <div>
+                                                    <div>{name->React.string}</div>
+                                                    <div className="exchange-rate">
+                                                        {
+                                                            switch token.exchange_rate {
+                                                                | None => "N/A"->React.string
+                                                                | Some(rate) => rate->Js.Float.toFixedWithPrecision(~digits=5)->React.string
+                                                            }
                                                         }
-                                                    }
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                    }
                                 }
-                            }
-                    )
-                    ->React.array
-                }
-            }
-        </div>
-    </div>
+                        )
+                        ->React.array
+                    }
+                </div>
+            </div>
+        }
+    }
 }

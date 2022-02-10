@@ -60,10 +60,10 @@ let make = () => {
                                     | Some(dlgt) => {
                                         let delegate_alias = 
                                             switch dlgt->Js.Dict.get("alias") {
-                                                | None => ""
+                                                | None => "N/A"
                                                 | Some(alias) =>
                                                     switch alias->Js.Json.decodeString {
-                                                        | None => ""
+                                                        | None => "N/A"
                                                         | Some(alias) => alias
                                                     }
                                             }
@@ -267,8 +267,8 @@ let make = () => {
                                 let (time, level) = last_activity
                                 <div>
                                     <div>{"Last activity:"->React.string}</div>
-                                    <div>{time->React.string}</div>
-                                    <div>{level->Belt.Int.toString->React.string}</div>
+                                    <div>{time->Utils.ParseDate.fromIsoString->React.string}</div>
+                                    <div>{level->Belt.Int.toString->{level => "(level " ++ level ++")"}->React.string}</div>
                                 </div>
                             }
                         }
@@ -280,8 +280,8 @@ let make = () => {
                                 let (time, level) = first_activity
                                 <div>
                                     <div>{"First activity:"->React.string}</div>
-                                    <div>{time->React.string}</div>
-                                    <div>{level->Belt.Int.toString->React.string}</div>
+                                    <div>{time->Utils.ParseDate.fromIsoString->React.string}</div>
+                                    <div>{level->Belt.Int.toString->{level => "(level " ++ level ++ ")"}->React.string}</div>
                                 </div>
                             }
                         }
